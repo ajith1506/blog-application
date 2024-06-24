@@ -4,11 +4,11 @@ import cors from "cors";
 import router from "./routes/router.js";
 import bodyParser from "body-parser";
 import { checkUser } from "./middleware/auth.js";
-import mongoose from "mongoose";
+import { connectDB } from "./config/Dbconnection.js";
 
 dotenv.config();
 const app = express();
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(bodyParser.json());
 app.use(router);
@@ -26,15 +26,8 @@ app.get("/", checkUser, (req, res) => {
   res.status(200).json(response);
 });
 
-const connectDB = async () => {
-  try {
-    await mongoose.connect(process.env.URI);
-    console.log("connected to database successfully.");
-    app.listen(PORT, () => {
-      console.log("Server is started");
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
 connectDB();
+
+app.listen(PORT, () => {
+  console.log(`Server is startedon ${PORT} `);
+});
